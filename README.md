@@ -1,4 +1,4 @@
-# Advent of Code 2018 in Multi-Platform Kotlin
+# Advent of Code 2019 in Multi-Platform Kotlin
 
 ## Intro
 In 2019, I will be participating in the [Advent of Code](https://adventofcode.com) using [Kotlin multi-platform](https://kotlinlang.org/docs/reference/multiplatform.html) code only. This means I can run my solutions on the JVM, on Node JS and natively on Windows through MinGW.
