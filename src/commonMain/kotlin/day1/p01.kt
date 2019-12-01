@@ -9,20 +9,12 @@ val p01 = fun() {
 
     weights.sumBy { calculateFuel(it) }.print { "Part 1 - fuel required $it" }
 
-    weights.sumBy { keepApplying(it, ::calculateFuel).takeWhile { it > 0 }.sum() }
+    weights.sumBy { generateSequence(it, ::calculateFuel).takeWhile { it > 0 }.sum() }
         .print { "Parr 2 - fuel required $it" }
 
 }
 
 fun calculateFuel(w: Int) = w / 3 - 2
-
-fun <T> keepApplying(start: T, block: (T) -> T) = sequence {
-    var current = start;
-    while (true) {
-        current = block(current).also { yield(it) }
-    }
-}
-
 
 const val input_01 = """90014
 136811
