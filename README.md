@@ -55,7 +55,7 @@ This year's first puzzle is an interesting deviation from that pattern, with nat
 What's really weird is how the the first run of the native solution is very fast, while later iterations are an order of magnitude slower.
 
 | Platform | Average | Measurements |
-| ---------| --------|--------------|
+| ---------| -------:|-------------:|
 | JVM      | 3.07  |50, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0|
 | Node JS  | 31.39  | 26, 21, 36, 22, 26, 38, 30, 39, 46, 27, 38, 27, 40, 24, 41, 29, 39, 25, 34, 39, 25, 41, 25, 23, 11 |
 |  MinGW64  | 23.88  | 3, 6, 22, 17, 22, 21, 41, 22, 21, 29, 21, 36, 19, 21, 22, 22, 21, 22, 23, 21, 22, 23, 36, 38, 34 | 
