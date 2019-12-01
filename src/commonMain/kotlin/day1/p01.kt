@@ -1,4 +1,4 @@
-package p01
+package day1
 
 import print
 

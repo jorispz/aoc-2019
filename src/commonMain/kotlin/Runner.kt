@@ -1,4 +1,4 @@
-import p01.p01
+import day1.p01
 
 data class Puzzle(val day: Int, val part: Int? = null)
 
@@ -15,7 +15,8 @@ object Puzzles {
             }
         }
 
-        println("\nTimes: ${times.map { (it / 1e6).toInt() }.joinToString()} ms")
+        println("\nAverage: ${times.average() / 1e6}")
+        println("Times: ${times.map { (it / 1e6).toInt() }.joinToString("|")} ms")
 
     }
 
