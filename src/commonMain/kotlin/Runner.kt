@@ -1,4 +1,4 @@
-import P01.p01
+import p01.p01
 
 data class Puzzle(val day: Int, val part: Int? = null)
 
