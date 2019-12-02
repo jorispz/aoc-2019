@@ -23,6 +23,8 @@ object Puzzles {
 
         println("\nAverage: ${average / 1e3} ± ${std / 1e3}")
         println("Times: ${times.map { (it / 1e3).toInt() }.joinToString()} µs")
+        println("\nAverage: ${average / 1e6} ± ${std / 1e6}")
+        println("Times: ${times.map { (it / 1e6).toInt() }.joinToString()} ms")
 
     }
 
