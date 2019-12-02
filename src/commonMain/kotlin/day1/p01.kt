@@ -10,7 +10,7 @@ val p01 = fun() {
     weights.sumBy { calculateFuel(it) }.print { "Part 1 - fuel required $it" }
 
     weights.sumBy { generateSequence(it, ::calculateFuel).takeWhile { it > 0 }.sum() }
-        .print { "Parr 2 - fuel required $it" }
+        .print { "Part 2 - fuel required $it" }
 
 }
 

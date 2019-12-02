@@ -1,6 +1,5 @@
 package day2
 
-
 enum class Instruction(val id: Int, val length: Int) {
 
     PLUS(1, 4) {
@@ -22,6 +21,7 @@ enum class Instruction(val id: Int, val length: Int) {
     abstract operator fun invoke(memory: RAM, vararg args: Int)
 }
 
+
 class RAM(initial: String) {
     private val contents: MutableMap<Int, Int> = mutableMapOf()
 
@@ -31,35 +31,30 @@ class RAM(initial: String) {
 
     operator fun set(i: Int, j: Int) = contents.set(i, j)
     operator fun get(i: Int) = contents.getValue(i)
-
     operator fun get(i: IntRange): IntArray = i.map { get(it) }.toIntArray()
 
     override fun toString() = contents.toString()
-
-
 }
 
 class Computer(initialMemory: RAM, initialPointer: Int = 0) {
     val memory = initialMemory
-    private var instructionPointer = initialPointer
+    private var pointer = initialPointer
     private val instructions = Instruction.values().associateBy { it.id }
 
     fun tick(): Boolean {
-        val instructionID = memory[instructionPointer];
+        val instructionID = memory[pointer];
         val instruction = instructions.getValue(instructionID)
-        if (instruction == Instruction.HALT) {
-            return true
+        return (instruction == Instruction.HALT) || false.also {
+            val args = memory[pointer + 1 until pointer + instruction.length]
+            instruction(memory, *args)
+            pointer += instruction.length
         }
-        val args = memory[instructionPointer + 1 until instructionPointer + instruction.length]
-        instruction(memory, *args)
 
-        instructionPointer += instruction.length
-        return false
     }
 
+    @Suppress("ControlFlowWithEmptyBody")
     fun runToCompletion(): Computer {
-        while (!tick()) {
-        }
+        generateSequence(::tick).takeWhile { !it }.last()
         return this
     }
 
