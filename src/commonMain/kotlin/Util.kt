@@ -22,11 +22,15 @@ fun <T> MutableSet<T>.takeFirst(): T = this.first().also { remove(it) }
 
 data class Position(val x: Int, val y: Int) {
 
+    companion object {
+        val ORIGIN = Position(0, 0)
+    }
+
     val left by lazy {
         Position(x - 1, y)
     }
     val right by lazy {
-        Position(x, y + 1)
+        Position(x + 1, y)
     }
     val up by lazy {
         Position(x, y - 1)
@@ -35,11 +39,20 @@ data class Position(val x: Int, val y: Int) {
         Position(x, y + 1)
     }
 
+    fun move(h: Heading) = when (h) {
+        Heading.N -> up
+        Heading.S -> down
+        Heading.W -> left
+        Heading.E -> right
+    }
+
     fun adjacents(): List<Position> = listOf(left, up, right, down)
 
-    private fun distanceTo(other: Position) = abs(x - other.x) + abs((y - other.y))
+    fun distanceTo(other: Position) = abs(x - other.x) + abs((y - other.y))
 
     fun adjacentTo(other: Position) = distanceTo(other) == 1
+
+
 
 
 }
@@ -54,6 +67,20 @@ enum class Turn {
 
 enum class Heading {
     N, S, E, W;
+
+    companion object {
+        fun from(s: String) = when (s.toUpperCase()) {
+            "N" -> N
+            "U" -> N
+            "S" -> S
+            "D" -> S
+            "W" -> W
+            "L" -> W
+            "E" -> E
+            "R" -> E
+            else -> throw IllegalArgumentException()
+        }
+    }
 
     fun right(): Heading = when (this) {
         N -> E

@@ -1,5 +1,6 @@
 import day1.p01
 import day2.p02
+import day3.p03
 import kotlin.math.sqrt
 
 data class Puzzle(val day: Int, val part: Int? = null)
@@ -8,7 +9,8 @@ object Puzzles {
 
     private val puzzles = mapOf(
         Puzzle(1) to p01,
-        Puzzle(2) to p02
+        Puzzle(2) to p02,
+        Puzzle(3) to p03
     )
 
     fun run(repeat: Int, day: Int, part: Int? = null) {
