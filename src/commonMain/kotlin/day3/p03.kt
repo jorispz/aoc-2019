@@ -10,7 +10,8 @@ val p03 = fun() {
 
     val positions = input.lines().map { it.route() }
     val crossings = positions[0].intersect(positions[1])
-    crossings.minBy { it.distanceTo(Position.ORIGIN) }?.distanceTo(Position.ORIGIN).print { "Part 1: $it" }
+    crossings.minBy { it.distanceTo(Position.ORIGIN) }?.distanceTo(Position.ORIGIN)
+        .print { "Part 1: $it" }
 
     fun Position.wireLength() = 2 + positions[0].indexOf(this) + positions[1].indexOf(this)
     crossings.minBy { it.wireLength() }?.wireLength().print { "Part 2: $it" }
