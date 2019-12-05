@@ -1,16 +1,12 @@
 package day5
 
+import print
+
 // 1: 5577461
 // 2: 7161591
 val p05 = fun() {
-
-    Computer(RAM(input), sequenceOf(1)) {
-        println(it)
-    }.runToCompletion()
-
-    Computer(RAM(input), sequenceOf(5)) {
-        println(it)
-    }.runToCompletion()
+    Computer(input).run(listOf(1)).print { "Part 1: $it" }
+    Computer(input).run(listOf(5)).print { "Part 2: $it" }
 }
 
 val input =
