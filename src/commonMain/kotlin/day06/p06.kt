@@ -7,7 +7,7 @@ data class Body(val id: String, var orbits: Body? = null)
 
 // 1: 271151
 // 2: 388
-val p06 = fun() {
+val p06 = suspend {
 
     val starMap = input.lines().map { it.split(")") }.fold(mutableMapOf<String, Body>()) { starMap, orbit ->
         val center = starMap.getOrPut(orbit[0]) { Body(orbit[0]) }

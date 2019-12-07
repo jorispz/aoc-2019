@@ -10,7 +10,7 @@ actual inline fun measureNanos(block: () -> Unit): Long {
     return nanos.roundToLong()
 }
 
-fun main() {
+suspend fun main() {
     val arguments = (process["argv"] as Array<String>).drop(2)
     val repeat = arguments[0].toInt()
     val day = arguments[1].toInt()

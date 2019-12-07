@@ -4,7 +4,7 @@ import print
 
 // 3305301
 // 4955106
-val p01 = fun() {
+val p01 = suspend {
     val weights = input_01.splitToSequence("\n").map { it.toInt() }
 
     weights.sumBy { calculateFuel(it) }.print { "Part 1 - fuel required $it" }

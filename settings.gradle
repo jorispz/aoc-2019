@@ -1,4 +1,2 @@
 rootProject.name = 'aoc-2019'
-
-
 enableFeaturePreview('GRADLE_METADATA')

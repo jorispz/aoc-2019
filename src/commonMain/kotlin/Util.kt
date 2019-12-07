@@ -1,6 +1,6 @@
 import kotlin.math.abs
 
-fun <T> T.print(msg: (T) -> Any? = { it }): T = this.apply { println(msg(this)) }
+inline fun <T> T.print(msg: (T) -> Any? = { it }): T = this.apply { println(msg(this)) }
 
 
 fun String.sorted(): String = this.toList().sorted().joinToString()
@@ -107,6 +107,8 @@ fun <T> Sequence<T>.infinite() = sequence {
         yieldAll(this@infinite)
     }
 }
+
+fun IntRange.permute() = this.toList().permute()
 
 fun <T> List<T>.permute(): List<List<T>> {
     if (this.size == 1) return listOf(this)

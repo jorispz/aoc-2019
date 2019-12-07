@@ -4,7 +4,7 @@ import print
 
 // 1: 3516593
 // 2: 7749
-val p02 = fun() {
+val p02 = suspend {
 
     Computer(RAM(input).apply {
         set(1, 12)

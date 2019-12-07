@@ -6,7 +6,7 @@ import print
 
 // 1: 489
 // 2: 93654
-val p03 = fun() {
+val p03 = suspend {
 
     val positions = input.lines().map { it.route() }
     val crossings = positions[0].intersect(positions[1])

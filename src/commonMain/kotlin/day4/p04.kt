@@ -2,7 +2,7 @@ package day4
 
 import print
 
-val p04 = fun() {
+val p04 = suspend {
 
     fun Int.isValidPassword(): Boolean {
         val pairs = this.toString().asSequence().windowed(2)

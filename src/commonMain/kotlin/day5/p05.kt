@@ -4,7 +4,7 @@ import print
 
 // 1: 5577461
 // 2: 7161591
-val p05 = fun() {
+val p05 = suspend {
     Computer(input).run(listOf(1)).print { "Part 1: $it" }
     Computer(input).run(listOf(5)).print { "Part 2: $it" }
 }
