@@ -1,5 +1,7 @@
 package day07
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -9,8 +11,10 @@ import permute
 import print
 
 val p07 = suspend {
-    (0..4).permute().map { calculateOutput(input, it) }.max().print { "Part 1: $it" }
-    (5..9).permute().map { calculateOutput(input, it) }.max().print { "Part 2: $it" }
+    coroutineScope {
+        (0..4).permute().map { async { calculateOutput(input, it) } }.awaitAll().max().print { "Part 1: $it" }
+        (5..9).permute().map { async { calculateOutput(input, it) } }.awaitAll().max().print { "Part 2: $it" }
+    }
 }
 
 suspend fun calculateOutput(program: String, phases: List<Int>): Int {

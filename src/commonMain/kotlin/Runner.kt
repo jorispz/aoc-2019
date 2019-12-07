@@ -24,7 +24,8 @@ object Puzzles {
     suspend fun run(repeat: Int, day: Int, part: Int? = null) {
         val times = (1..repeat).map {
             measureNanos {
-                puzzles[Puzzle(day, part)]!!()
+                val p = puzzles[Puzzle(day, part)]!!
+                p()
             }
         }
 
