@@ -53,8 +53,6 @@ data class Position(val x: Int, val y: Int) {
     fun adjacentTo(other: Position) = distanceTo(other) == 1
 
 
-
-
 }
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = Pair(this.first + other.first, this.second + other.second)
@@ -109,3 +107,19 @@ fun <T> Sequence<T>.infinite() = sequence {
         yieldAll(this@infinite)
     }
 }
+
+fun <T> List<T>.permute(): List<List<T>> {
+    if (this.size == 1) return listOf(this)
+    val perms = mutableListOf<List<T>>()
+    val toInsert = this[0]
+    for (perm in this.drop(1).permute()) {
+        for (i in 0..perm.size) {
+            val newPerm = perm.toMutableList()
+            newPerm.add(i, toInsert)
+            perms.add(newPerm)
+        }
+    }
+    return perms
+}
+
+

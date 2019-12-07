@@ -1,4 +1,5 @@
 import day06.p06
+import day07.p07
 import day1.p01
 import day2.p02
 import day3.p03
@@ -16,7 +17,8 @@ object Puzzles {
         Puzzle(3) to p03,
         Puzzle(4) to p04,
         Puzzle(5) to p05,
-        Puzzle(6) to p06
+        Puzzle(6) to p06,
+        Puzzle(7) to p07
     )
 
     fun run(repeat: Int, day: Int, part: Int? = null) {
