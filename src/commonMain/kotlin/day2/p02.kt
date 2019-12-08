@@ -1,5 +1,7 @@
 package day2
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import print
 
 // 1: 3516593
@@ -12,16 +14,17 @@ val p02 = suspend {
     }).runToCompletion().memory[0].print { "Part 1: $it" }
 
     // 7749
-    for (i in 0..99) {
-        for (j in 0..99) {
-            val output = Computer(RAM(input).apply {
-                set(1, i)
-                set(2, j)
-            }).runToCompletion().memory[0]
-            if (output == 19690720) {
-                (100 * i + j).print { "Part 2: $it" }
+    coroutineScope {
+        (0..99).flatMap { i ->
+            (0..99).map { j ->
+                async {
+                    Pair(100 * i + j, Computer(RAM(input).apply {
+                        set(1, i)
+                        set(2, j)
+                    }).runToCompletion().memory[0])
+                }
             }
-        }
+        }.find { it.await().second == 19690720 }.print { "Part 2: ${it?.await()?.first}" }
     }
 
 
