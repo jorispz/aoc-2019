@@ -13,6 +13,7 @@ val p04 = suspend {
 
     (356261..846303).count { it.isValidPassword() }.print()
 
+
     fun Int.groupedDigits(): List<List<Char>> {
         val result = mutableListOf(mutableListOf<Char>())
         this.toString().forEach {
@@ -33,5 +34,4 @@ val p04 = suspend {
     }
 
     (356261..846303).count { it.isValidPassword2() }.print()
-
 }

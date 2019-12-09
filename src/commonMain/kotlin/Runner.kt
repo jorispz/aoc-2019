@@ -1,6 +1,7 @@
 import day06.p06
 import day07.p07
 import day08.p08
+import day09.p09
 import day1.p01
 import day2.p02
 import day3.p03
@@ -20,13 +21,14 @@ object Puzzles {
         Puzzle(5) to p05,
         Puzzle(6) to p06,
         Puzzle(7) to p07,
-        Puzzle(8) to p08
+        Puzzle(8) to p08,
+        Puzzle(9) to p09
     )
 
     suspend fun run(repeat: Int, day: Int, part: Int? = null) {
         val times = (1..repeat).map {
             measureNanos {
-                val p = puzzles[Puzzle(day, part)]!!
+                val p = puzzles.getValue(Puzzle(day, part))
                 p()
             }
         }
