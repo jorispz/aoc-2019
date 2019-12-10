@@ -52,6 +52,12 @@ data class Position(val x: Int, val y: Int) {
 
     fun adjacentTo(other: Position) = distanceTo(other) == 1
 
+    fun closes(a: Position, b: Position): Position {
+        val distA = this.distanceTo(a)
+        val distB = this.distanceTo(b)
+        return if (distB < distA) b else a
+    }
+
 
 }
 
@@ -124,4 +130,11 @@ fun <T> List<T>.permute(): List<List<T>> {
     return perms
 }
 
+tailrec fun gcd(a: Int, b: Int): Int {
+    return if (b == 0) {
+        a
+    } else {
+        gcd(b, a % b)
+    }
+}
 
