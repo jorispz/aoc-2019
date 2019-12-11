@@ -5,7 +5,7 @@ import Position
 import boundingBox
 import day09.launchComputer
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.channels.receiveOrNull
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import print
@@ -41,9 +41,8 @@ suspend fun paint(initalColor: Long): Map<Position, Pair<Long, Long>> {
         launch {
             var heading = Heading.N
             var position = Position(0, 0)
-            try {
                 while (true) {
-                    val newColor = stdout.receive()
+                    val newColor = stdout.receiveOrNull() ?: break
                     val panel = world.getOrPut(position) { Pair(BLACK, 0L) }
                     if (panel.first != newColor) {
                         world[position] = Pair(newColor, panel.second + 1)
@@ -56,10 +55,6 @@ suspend fun paint(initalColor: Long): Map<Position, Pair<Long, Long>> {
                     position = position.move(heading)
                     stdin.send(world.getOrPut(position) { Pair(BLACK, 0L) }.first)
                 }
-
-            } catch (e: ClosedReceiveChannelException) {
-                // done
-            }
 
         }
     }
