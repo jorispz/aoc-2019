@@ -4,6 +4,7 @@ import day08.p08
 import day09.p09
 import day1.p01
 import day10.p10
+import day11.p011
 import day2.p02
 import day3.p03
 import day4.p04
@@ -24,7 +25,8 @@ object Puzzles {
         Puzzle(7) to p07,
         Puzzle(8) to p08,
         Puzzle(9) to p09,
-        Puzzle(10) to p10
+        Puzzle(10) to p10,
+        Puzzle(11) to p011
     )
 
     suspend fun run(repeat: Int, day: Int, part: Int? = null) {

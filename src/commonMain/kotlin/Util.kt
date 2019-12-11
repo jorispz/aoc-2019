@@ -108,6 +108,17 @@ enum class Heading {
     }
 }
 
+data class BoundingBox(val topLeft: Position, val bottomRight: Position)
+
+fun Collection<Position>.boundingBox(): BoundingBox {
+    val minX = this.minBy { it.x }?.x!!
+    val maxX = this.maxBy { it.x }?.x!!
+    val minY = this.minBy { it.y }?.y!!
+    val maxY = this.maxBy { it.y }?.y!!
+    return BoundingBox(Position(minX, maxY), Position(maxX, minY))
+}
+
+
 fun <T> Sequence<T>.infinite() = sequence {
     while (true) {
         yieldAll(this@infinite)
