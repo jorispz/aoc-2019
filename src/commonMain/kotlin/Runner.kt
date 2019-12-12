@@ -5,10 +5,12 @@ import day09.p09
 import day1.p01
 import day10.p10
 import day11.p011
+import day12.p12
 import day2.p02
 import day3.p03
 import day4.p04
 import day5.p05
+import p13.p13
 import kotlin.math.sqrt
 
 data class Puzzle(val day: Int, val part: Int? = null)
@@ -26,7 +28,9 @@ object Puzzles {
         Puzzle(8) to p08,
         Puzzle(9) to p09,
         Puzzle(10) to p10,
-        Puzzle(11) to p011
+        Puzzle(11) to p011,
+        Puzzle(12) to p12,
+        Puzzle(13) to p13
     )
 
     suspend fun run(repeat: Int, day: Int, part: Int? = null) {

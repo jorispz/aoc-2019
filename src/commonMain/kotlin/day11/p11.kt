@@ -23,8 +23,8 @@ val p011 = suspend {
     (bb.bottomRight.y..bb.topLeft.y).map { y ->
         (bb.topLeft.x..bb.bottomRight.x).map { x ->
             when (world[Position(x, y)]?.first) {
-                BLACK, null -> '.'
-                WHITE -> '#'
+                BLACK, null -> '\u2591'
+                WHITE -> '\u2588'
                 else -> throw IllegalArgumentException()
             }
         }.joinToString("").print()
