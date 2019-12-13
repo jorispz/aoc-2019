@@ -108,7 +108,15 @@ enum class Heading {
     }
 }
 
-data class BoundingBox(val topLeft: Position, val bottomRight: Position)
+data class BoundingBox(val topLeft: Position, val bottomRight: Position) {
+    fun render(block: (Position) -> Char) {
+        (bottomRight.y..topLeft.y).map { y ->
+            (topLeft.x..bottomRight.x).map { x ->
+                block(Position(x, y))
+            }.joinToString("").print()
+        }
+    }
+}
 
 fun Collection<Position>.boundingBox(): BoundingBox {
     val minX = this.minBy { it.x }?.x!!

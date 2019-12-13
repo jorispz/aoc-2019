@@ -66,6 +66,8 @@ val p12 = suspend {
 
     leastCommonMultiple(periodX, periodY, periodZ).print { "Part 2: $it" }
 
+    timeline.map { it.map { it.first } }.filter { it.distinct().size != 4 }.first().print()
+
 }
 
 val test = """<x=-1, y=0, z=2>
