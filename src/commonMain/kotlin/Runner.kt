@@ -6,11 +6,11 @@ import day1.p01
 import day10.p10
 import day11.p011
 import day12.p12
+import day13.p13
 import day2.p02
 import day3.p03
 import day4.p04
 import day5.p05
-import p13.p13
 import kotlin.math.sqrt
 
 data class Puzzle(val day: Int, val part: Int? = null)
