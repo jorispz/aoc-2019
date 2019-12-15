@@ -8,7 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import print
-import kotlin.math.min
+import shortestPathLengths
 
 
 val p15 = suspend {
@@ -65,23 +65,7 @@ val p15 = suspend {
         }
     }
 
-    data class Vertex(val position: Position, var distance: Int)
 
-    fun shortestPaths(origin: Position): MutableList<Vertex> {
-        val shortest = mutableListOf<Vertex>()
-        val source = world.filterValues { it == EMPTY }.mapTo(mutableListOf()) { Vertex(it.key, Int.MAX_VALUE) }
-        source.find { it.position == origin }!!.distance = 0
-
-        while (source.isNotEmpty()) {
-            source.sortBy { it.distance }
-            val next = source.removeAt(0)
-            shortest.add(next)
-            source.filter { it.position in next.position.adjacents() }.forEach {
-                it.distance = min(next.distance + 1, it.distance)
-            }
-        }
-        return shortest
-    }
 
     coroutineScope {
         val cpu = launchComputer(input, stdin, stdout)
@@ -89,10 +73,13 @@ val p15 = suspend {
         launch {
             explore(Position.ORIGIN)
             render()
-            shortestPaths(Position.ORIGIN).find { it.position == tankLocation }
-                ?.distance.print { "Part 1: Distance tank is $it" }
-            shortestPaths(tankLocation!!).maxBy { it.distance }
-                ?.distance.print { "Part 2: Minutes to filled with oxygen is $it" }
+            val vertices = world.filterValues { it == EMPTY }.keys
+            shortestPathLengths(Position.ORIGIN, vertices) { p -> this.adjacentTo(p) }.find { it.first == tankLocation }
+                ?.second.print { "Part 1: Distance tank is $it" }
+
+            shortestPathLengths(tankLocation!!, vertices) { p -> this.adjacentTo(p) }.maxBy { it.second }
+                ?.second.print { "Part 2: Minutes to filled with oxygen is $it" }
+
             cpu.cancel()
         }
     }
