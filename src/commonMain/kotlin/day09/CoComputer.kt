@@ -1,6 +1,7 @@
 package day09
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ enum class Instruction(val id: Int, val numParameters: Int) {
 val instructions = Instruction.values().associateBy { it.id }
 
 
-fun CoroutineScope.launchComputer(program: String, input: ReceiveChannel<Long>, output: SendChannel<Long>) {
+fun CoroutineScope.launchComputer(program: String, input: ReceiveChannel<Long>, output: SendChannel<Long>): Job {
     val memory =
         program.split(",").withIndex().associateTo(mutableMapOf()) { it.index to it.value.toLong() }.withDefault { 0 }
     var pointer = 0
@@ -47,7 +48,7 @@ fun CoroutineScope.launchComputer(program: String, input: ReceiveChannel<Long>, 
         override fun write(j: Long) = memory.set(baseAddress + i.toInt(), j)
     }
 
-    launch {
+    return launch {
         while (true) {
             val next = memory.getValue(pointer)
             val instructionID = next.rem(100).toInt()

@@ -16,8 +16,8 @@ fun Map<Position, Int>.render() {
             0, null -> ' '
             1 -> '\u2588'
             2 -> '\u2591'
-            3 -> '-'
-            4 -> 'o'
+            3 -> '\u2581'
+            4 -> '\u25cf'
             else -> ' '
         }
     }

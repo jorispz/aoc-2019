@@ -39,6 +39,14 @@ data class Position(val x: Int, val y: Int) {
         Position(x, y + 1)
     }
 
+    fun headingFrom(other: Position): Heading = when (other) {
+        this.up -> Heading.S
+        this.down -> Heading.N
+        this.left -> Heading.E
+        this.right -> Heading.W
+        else -> throw IllegalArgumentException("Not adjacent")
+    }
+
     fun move(h: Heading) = when (h) {
         Heading.N -> up
         Heading.S -> down
@@ -110,11 +118,13 @@ enum class Heading {
 
 data class BoundingBox(val topLeft: Position, val bottomRight: Position) {
     fun render(block: (Position) -> Char) {
+        println()
         (bottomRight.y..topLeft.y).map { y ->
             (topLeft.x..bottomRight.x).map { x ->
                 block(Position(x, y))
             }.joinToString("").print()
         }
+        println()
     }
 }
 

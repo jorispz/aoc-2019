@@ -27,6 +27,7 @@ val p12 = suspend {
         Pair(Vector(x.toInt(), y.toInt(), z.toInt()), Vector(0, 0, 0))
     }
 
+
     fun List<Pair<Vector, Vector>>.update() = this.map { moon ->
         val (pos, vel) = moon
         val newVel = this.without(moon).fold(vel) { v, m ->
