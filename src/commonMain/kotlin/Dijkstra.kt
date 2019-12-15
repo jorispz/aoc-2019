@@ -1,6 +1,6 @@
 import kotlin.math.min
 
-data class Vertex<T>(val node: T, var distance: Int = Int.MAX_VALUE)
+private data class Vertex<T>(val node: T, var distance: Int = Int.MAX_VALUE)
 
 fun <T> shortestPathLengths(origin: T, nodes: Collection<T>, adjacentTo: T.(t: T) -> Boolean): List<Pair<T, Int>> {
 
