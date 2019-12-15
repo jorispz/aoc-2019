@@ -12,91 +12,91 @@ import kotlin.math.min
 
 
 val p15 = suspend {
+
     val WALL = '\u2588'
-    val TANK = 'T'
     val EMPTY = ' '
-    val world = mutableMapOf(Position.ORIGIN to EMPTY)
 
-    fun explore(current: Position): Heading {
-        val potentials = current.adjacents().filter { world[it] != WALL && world[it] != TANK }
-        val next = potentials.firstOrNull { it !in world.keys } ?: potentials.random()
-        return next.headingFrom(current)
+    data class Vertex(val position: Position, val type: Char, var distance: Int = Int.MAX_VALUE)
+
+    val root = Vertex(Position.ORIGIN, EMPTY, 0)
+    val world = mutableMapOf(Position.ORIGIN to root)
+    var tankLocation: Position? = null
+
+    fun render() {
+        world.keys.boundingBox().render { p ->
+            when {
+                p == Position.ORIGIN -> 'X'
+                p == tankLocation -> 'T'
+                p in world.keys -> world.getValue(p).type
+                else -> '\u2591'
+            }
+        }
     }
 
+    val stdin = Channel<Long>(1)
+    val stdout = Channel<Long>(1)
 
-    var position = Position.ORIGIN
-    var heading = Heading.N
-    var tank: Position? = null
+    suspend fun move(h: Heading): Int {
+        stdin.send(
+            when (h) {
+                Heading.N -> 1
+                Heading.S -> 2
+                Heading.W -> 3
+                Heading.E -> 4
+            }.toLong()
+        )
+        return stdout.receive().toInt()
+    }
+
+    suspend fun explore(from: Vertex) {
+        val neverVisited = from.position.adjacents().filter { it !in world.keys }
+        for (neighbor in neverVisited) {
+            val heading = neighbor.headingFrom(from.position)
+            val nextPosition = from.position.move(heading)
+            when (val result = move(heading)) {
+                0 -> world[nextPosition] = Vertex(nextPosition, WALL, Int.MAX_VALUE)
+                1, 2 -> {
+                    val new = Vertex(nextPosition, EMPTY, from.distance + 1)
+                    if (result == 2) {
+                        tankLocation = new.position
+                    }
+                    world[nextPosition] = new
+                    explore(new)
+                    move(heading.reverse())
+                }
+            }
+
+        }
+    }
+
+    fun shortestPaths(): MutableList<Vertex> {
+        val shortest = mutableListOf<Vertex>()
+        val source =
+            world.filterValues { it.type == EMPTY }.values.mapTo(mutableListOf()) { it.copy(distance = Int.MAX_VALUE) }
+        source.find { it.position == tankLocation }?.distance = 0
+
+        while (source.isNotEmpty()) {
+            source.sortBy { it.distance }
+            val next = source.removeAt(0)
+            shortest.add(next)
+            source.filter { it.position in next.position.adjacents() }.forEach {
+                it.distance = min(next.distance + 1, it.distance)
+            }
+        }
+        return shortest
+    }
+
     coroutineScope {
-        val stdin = Channel<Long>(1)
-        val stdout = Channel<Long>(1)
         val cpu = launchComputer(input, stdin, stdout)
+
         launch {
-            while (tank == null) {
-                stdin.send(
-                    when (heading) {
-                        Heading.N -> 1
-                        Heading.S -> 2
-                        Heading.W -> 3
-                        Heading.E -> 4
-                    }
-                )
-                when (stdout.receive().toInt()) {
-                    0 -> {
-                        world[position.move(heading)] = WALL
-                    }
-                    1 -> {
-                        position = position.move(heading)
-                        world[position] = EMPTY
-                    }
-                    2 -> {
-                        world[position.move(heading)] = TANK
-                        tank = position.move(heading)
-                    }
-                    else -> throw IllegalArgumentException().also { print("ERROR") }
-
-                }
-                heading = explore(position)
-
-
-            }
-            world.keys.boundingBox().render { p ->
-                when {
-                    p == Position.ORIGIN -> 'X'
-                    p == position -> 'D'
-                    p in world.keys -> world.getValue(p)
-                    else -> '\u2591'
-                }
-            }
-            tank.print()
+            explore(root)
+            render()
+            world[tankLocation]?.distance.print { "Part 1: distance from origin to tank is $it" }
+            shortestPaths().maxBy { it.distance }.print { "Part 2: ${it?.distance}" }
             cpu.cancel()
-
         }
     }
-
-    data class Vertex(val position: Position, var distance: Int = Int.MAX_VALUE)
-
-    val target = tank!!
-
-    val shortest = mutableListOf<Vertex>()
-    val source = world.filter { it.value == EMPTY }.keys.mapTo(mutableListOf()) { Vertex(it) }
-    source.find { it.position == Position.ORIGIN }?.distance = 0
-    source.add(Vertex(target))
-
-    while (true) {
-        source.sortBy { it.distance }
-        val next = source.removeAt(0)
-        shortest.add(next)
-        if (next.position == target) {
-            next.distance.print { "Part 1: $it" }
-            break
-        }
-        source.filter { it.position in next.position.adjacents() }.forEach {
-            it.distance = min(next.distance + 1, it.distance)
-        }
-    }
-
-
 }
 
 val input =

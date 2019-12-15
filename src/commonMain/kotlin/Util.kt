@@ -39,13 +39,15 @@ data class Position(val x: Int, val y: Int) {
         Position(x, y + 1)
     }
 
-    fun headingFrom(other: Position): Heading = when (other) {
-        this.up -> Heading.S
-        this.down -> Heading.N
-        this.left -> Heading.E
-        this.right -> Heading.W
+    fun headingTo(other: Position) = when (other) {
+        this.up -> Heading.N
+        this.down -> Heading.S
+        this.left -> Heading.W
+        this.right -> Heading.E
         else -> throw IllegalArgumentException("Not adjacent")
     }
+
+    fun headingFrom(other: Position) = headingTo(other).reverse()
 
     fun move(h: Heading) = when (h) {
         Heading.N -> up
@@ -174,3 +176,4 @@ tailrec fun gcd(a: Long, b: Long): Long {
         gcd(b, a % b)
     }
 }
+
