@@ -16,10 +16,7 @@ val p15 = suspend {
     val WALL = '\u2588'
     val EMPTY = ' '
 
-    data class Vertex(val position: Position, val type: Char, var distance: Int = Int.MAX_VALUE)
-
-    val root = Vertex(Position.ORIGIN, EMPTY, 0)
-    val world = mutableMapOf(Position.ORIGIN to root)
+    val world = mutableMapOf(Position.ORIGIN to EMPTY)
     var tankLocation: Position? = null
 
     fun render() {
@@ -27,7 +24,7 @@ val p15 = suspend {
             when {
                 p == Position.ORIGIN -> 'X'
                 p == tankLocation -> 'T'
-                p in world.keys -> world.getValue(p).type
+                p in world.keys -> world.getValue(p)
                 else -> '\u2591'
             }
         }
@@ -48,20 +45,19 @@ val p15 = suspend {
         return stdout.receive().toInt()
     }
 
-    suspend fun explore(from: Vertex) {
-        val neverVisited = from.position.adjacents().filter { it !in world.keys }
+    suspend fun explore(from: Position) {
+        val neverVisited = from.adjacents().filter { it !in world.keys }
         for (neighbor in neverVisited) {
-            val heading = neighbor.headingFrom(from.position)
-            val nextPosition = from.position.move(heading)
+            val heading = neighbor.headingFrom(from)
+            val nextPosition = from.move(heading)
             when (val result = move(heading)) {
-                0 -> world[nextPosition] = Vertex(nextPosition, WALL, Int.MAX_VALUE)
+                0 -> world[nextPosition] = WALL
                 1, 2 -> {
-                    val new = Vertex(nextPosition, EMPTY, from.distance + 1)
                     if (result == 2) {
-                        tankLocation = new.position
+                        tankLocation = nextPosition
                     }
-                    world[nextPosition] = new
-                    explore(new)
+                    world[nextPosition] = EMPTY
+                    explore(nextPosition)
                     move(heading.reverse())
                 }
             }
@@ -69,11 +65,12 @@ val p15 = suspend {
         }
     }
 
-    fun shortestPaths(): MutableList<Vertex> {
+    data class Vertex(val position: Position, var distance: Int)
+
+    fun shortestPaths(origin: Position): MutableList<Vertex> {
         val shortest = mutableListOf<Vertex>()
-        val source =
-            world.filterValues { it.type == EMPTY }.values.mapTo(mutableListOf()) { it.copy(distance = Int.MAX_VALUE) }
-        source.find { it.position == tankLocation }?.distance = 0
+        val source = world.filterValues { it == EMPTY }.mapTo(mutableListOf()) { Vertex(it.key, Int.MAX_VALUE) }
+        source.find { it.position == origin }!!.distance = 0
 
         while (source.isNotEmpty()) {
             source.sortBy { it.distance }
@@ -90,10 +87,12 @@ val p15 = suspend {
         val cpu = launchComputer(input, stdin, stdout)
 
         launch {
-            explore(root)
+            explore(Position.ORIGIN)
             render()
-            world[tankLocation]?.distance.print { "Part 1: distance from origin to tank is $it" }
-            shortestPaths().maxBy { it.distance }.print { "Part 2: ${it?.distance}" }
+            shortestPaths(Position.ORIGIN).find { it.position == tankLocation }
+                ?.distance.print { "Part 1: Distance tank is $it" }
+            shortestPaths(tankLocation!!).maxBy { it.distance }
+                ?.distance.print { "Part 2: Minutes to filled with oxygen is $it" }
             cpu.cancel()
         }
     }
